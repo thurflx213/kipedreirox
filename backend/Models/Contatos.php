@@ -12,6 +12,13 @@ function listarContatoPorId($db, $id) {
     $statement->bindParam(':id', $id);
     return $statement->execute();
 }
+function buscarUsuariosInativos($email){
+   $sql = "SELECT * FROM tbl_usuario where email_usuario = :email and excluido_em IS NOT NULL";
+   $stmt = $this->db->prepare($sql);
+   $stmt->bindParam(':email', $email);
+   $stmt->execute();
+   return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 function inserirContato($db, $nome, $email, $telefone, $mensagem){
     $sql = "INSERT INTO tbl_contato (nome_contato, email_contato, telefone_contato, mensagem_contato)
             VALUES (:nome, :email, :telefone, :mensagem)";
@@ -24,3 +31,18 @@ function inserirContato($db, $nome, $email, $telefone, $mensagem){
 
     return $statement->execute();
 }
+function ativarUsuario($id){
+    $dataatual = NULL;
+    $sql = "UPDATE tbl_usuario SET 
+    excluido_em = :atual
+    WHERE id_usuario = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':id', $id);
+    $stmt->bindParam(':atual', $dataatual);
+    if($stmt->execute()){
+        return true;
+    }else{
+        return false;
+    }
+  
+  }

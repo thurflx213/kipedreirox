@@ -23,9 +23,25 @@ class Usuario{
    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function buscarUsuariosInativos($email){
+   $sql = "SELECT * FROM tbl_usuario where excluido_em IS NOT NULL";
+   $stmt = $this->db->prepare($sql);
+   $stmt->bindParam(':email', $email);
+   $stmt->execute();
+   return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
    //Metodo de buscar todos usuarios por email
    function buscarUsuariosPorEmail($email){
    $sql = "SELECT * FROM tbl_usuario where email_usuario = :email and excluido_em IS NULL";
+   $stmt = $this->db->prepare($sql);
+   $stmt->bindParam(':email', $email);
+   $stmt->execute();
+   return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function buscarUsuariosPorEmailInativos($email){
+   $sql = "SELECT * FROM tbl_usuario where email_usuario = :email and excluido_em IS NOT NULL";
    $stmt = $this->db->prepare($sql);
    $stmt->bindParam(':email', $email);
    $stmt->execute();
@@ -79,8 +95,8 @@ class Usuario{
 
    }
 
-    //Metodo de deletar usuario
-    function deletarUsuario($id){
+    //Metodo de excluir usuario
+    function excluirUsuario($id){
     $dataatual = date('Y-m-d H:i:s');
     $sql = "UPDATE tbl_usuario SET 
     excluido_em = :atual
@@ -93,6 +109,21 @@ class Usuario{
     }else{
         return false;
     }
+}
 
-   }
+    function ativarUsuario($id){
+    $dataatual = NULL;
+    $sql = "UPDATE tbl_usuario SET 
+    excluido_em = :atual
+    WHERE id_usuario = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':id', $id);
+    $stmt->bindParam(':atual', $dataatual);
+    if($stmt->execute()){
+        return true;
+    }else{
+        return false;
+    }
+
   }
+}
