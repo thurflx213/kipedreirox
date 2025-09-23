@@ -1,5 +1,8 @@
 <?php
 
+namespace App\Kipedreiro\Models;
+use PDO;
+
 function listarContatos($db){
   $sql = 'SELECT id_contato, nome_contato, telefone_contato, email_contato, mensagem_contato FROM tbl_contato ';
 $statment = $db->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
