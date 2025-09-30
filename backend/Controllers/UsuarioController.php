@@ -36,6 +36,7 @@ class UsuarioController {
     }
 
     public function salvarUsuario(){
+        var_dump($_POST);
         echo "Salvar usuario";
     }
     public function atualizarUsuario(){
