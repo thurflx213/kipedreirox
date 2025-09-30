@@ -1,19 +1,29 @@
 <?php
+namespace App\Kipedreiro;
 require_once __DIR__ . '/../vendor/autoload.php';
+use App\Kipedreiro\Rotas\Rotas;
 
+$rotas = Rotas::get();
 
-use App\Kipedreiro\Controles\UsuarioController;
+$metodohttp = $_SERVER ["REQUEST_METHOD"];
+$rota = $_SERVER ["REQUEST_URI"];
 
-// var_dump($_SERVER ["REQUEST_URI"]);
-// echo"\n\n\n\n";
-// var_dump($_REQUEST ["REQUEST_METHOD"]);
-// exit;
-if($_SERVER["REQUEST_URI"] == "/backend/buscarusuario" && $_SERVER ["REQUEST_METHOD"] == "GET")
-{
-    $controller = new UsuarioController;
-    $resultado = $controller->index();
-    var_dump($resultado);
-}else
-{
-    echo 'rota não encontrada';
+if(array_key_exists($rota, $rotas[$metodohttp]) == false){
+    http_response_code(404);
+    echo "Pagina não encontrada";
+    exit;
 }
+
+$partes = explode("@", $rotas [$metodohttp] [$rota]);
+$nomeController = $partes[0];
+$metodoController = $partes[1];
+$nomeCompletoController = "App\\Kipedreiro\\Controllers\\". $nomeController;
+if(!class_exists($nomeCompletoController )){
+    http_response_code(500);
+    echo "O controlador não encontrado";
+    exit;
+}
+$controller = new $nomeCompletoController();
+$controller ->$metodoController();
+
+
