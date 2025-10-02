@@ -4,6 +4,8 @@ namespace App\Kipedreiro\Controllers;
 use App\Kipedreiro\Models\Usuario;
 use App\Kipedreiro\Database\Database;
 use App\Kipedreiro\Core\View;
+use App\Kipedreiro\Core\Redirect;
+use App\Kipedreiro\Validadores\UsuarioValidador;
 
 class UsuarioController {
     public $usuario;
@@ -12,7 +14,6 @@ class UsuarioController {
         $this->db = Database::getInstance();
         $this->usuario = new Usuario($this->db);
     }
-    // index
     public function index(){
         $resultado = $this->usuario->buscarUsuarios();
        var_dump($resultado);
@@ -36,8 +37,22 @@ class UsuarioController {
     }
 
     public function salvarUsuario(){
-        var_dump($_POST);
-        echo "Salvar usuario";
+        $erros = UsuarioValidador::ValidarEntradas($_POST);
+        if(!empty($erros)){
+            Redirect::redirecionarComMensagem("usuario/criar", "error", implode("<br>", $erros));
+            
+        }
+       if($this->usuario->inserirUsuario(
+            $_POST["nome_usuario"],
+            $_POST["email_usuario"],
+            $_POST["senha_usuario"],
+            $_POST["tipo_usuario"],
+            "Ativo"
+        )){
+            Redirect::redirecionarComMensagem("usuario/listar", "success", "Usuário criado com sucesso!");
+        }else{
+            Redirect::redirecionarComMensagem("usuario/create", "error", "Erro ao criar usuário. Tente novamente.");
+        }
     }
     public function atualizarUsuario(){
         echo "Atualizar usuario";

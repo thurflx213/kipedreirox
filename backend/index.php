@@ -1,6 +1,9 @@
 <?php
 namespace App\Kipedreiro;
 require_once __DIR__ . '/../vendor/autoload.php';
+  if(!isset($_SESSION)){
+            session_start();
+        }
 use App\Kipedreiro\Rotas\Rotas;
 
 $rotas = Rotas::get();

@@ -52,7 +52,11 @@ function buscarUsuariosPorEmailInativos($email){
 }
 
    //Metodo de inserir usuario
-   function inserirUsuario($nome, $email, $senha, $tipo, $status){
+   function inserirUsuario($nome, 
+   $email, 
+   $senha, 
+   $tipo, 
+   $status){
     $senha = password_hash($senha, PASSWORD_DEFAULT);
     $sql = "INSERT INTO tbl_usuario (nome_usuario, email_usuario,
     senha_usuario, tipo_usuario, status_usuario)
