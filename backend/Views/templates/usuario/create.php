@@ -17,6 +17,10 @@
         <option value="user">Usuario</option>
         <option value="admin">Administrador</option>
     </select><br>
+     <label for="imagem">Imagem:</label>
+   <input type="file" id="imagem" name="imagem" accept="image/*">
+   <button type="submit">Salvar</button>
+   </form>
 
    <button type="submit">Salvar</button>
 

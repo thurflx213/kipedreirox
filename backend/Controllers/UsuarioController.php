@@ -6,13 +6,16 @@ use App\Kipedreiro\Database\Database;
 use App\Kipedreiro\Core\View;
 use App\Kipedreiro\Core\Redirect;
 use App\Kipedreiro\Validadores\UsuarioValidador;
+use App\Kipedreiro\Core\FileManager;
 
 class UsuarioController {
     public $usuario;
     public $db;
+    public $gerenciarImagem;
     public function __construct() {
         $this->db = Database::getInstance();
         $this->usuario = new Usuario($this->db);
+        $this->gerenciarImagem = new FileManager('upload');
     }
     public function index(){
         $resultado = $this->usuario->buscarUsuarios();
@@ -28,12 +31,22 @@ class UsuarioController {
         view::render("usuario/create");
     }
 
-    public function viewEditarUsuarios(){
-         view::render("usuario/edit");
+    public function viewEditarUsuarios(int $id){
+       $dados = $this->usuario->buscarUsuariosPorId($id);
+       var_dump($dados);
+       foreach($dados as $usuario){
+        $dados = $usuario;
+       }
+       view::render("usuario/edit", ["usuario" => $dados]);
     }
 
-    public function viewExcluirUsuarios(){
-         view::render("usuario/delete");
+    public function viewExcluirUsuarios($id){
+         view::render("usuario/delete", ["id_usuario" => $id]);
+    }
+    public function relatorioUsuario($id, $data1, $data2){
+     view::render("usuario/relatorio",
+           ["id" => $id, "data1" => $data1, "data2" => $data2]
+      );
     }
 
     public function salvarUsuario(){
@@ -42,12 +55,14 @@ class UsuarioController {
             Redirect::redirecionarComMensagem("usuario/criar", "error", implode("<br>", $erros));
             
         }
+        $imagem = $this->gerenciarImagem->salvarArquivo($_FILES['imagem'], 'usuario');
        if($this->usuario->inserirUsuario(
             $_POST["nome_usuario"],
             $_POST["email_usuario"],
             $_POST["senha_usuario"],
             $_POST["tipo_usuario"],
-            "Ativo"
+            "Ativo",
+            $imagem
         )){
             Redirect::redirecionarComMensagem("usuario/listar", "success", "Usuário criado com sucesso!");
         }else{
