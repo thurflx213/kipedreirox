@@ -39,7 +39,12 @@ function buscarUsuariosAtivos() {
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_COLUMN);
 }
-
+function buscarUsuariosInativos() {
+    $sql = "SELECT COUNT(*) AS total_inativos FROM tbl_usuario WHERE excluido_em IS NOT NULL";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_COLUMN);
+}
 public function paginacao(int $pagina = 1, int $por_pagina = 10): array{
         $totalQuery = "SELECT COUNT(*) FROM `tbl_usuario`";
         $totalStmt = $this->db->query($totalQuery);
@@ -64,12 +69,7 @@ public function paginacao(int $pagina = 1, int $por_pagina = 10): array{
         ];
     }
 
-function buscarUsuariosInativos() {
-    $sql = "SELECT COUNT(*) AS total_inativos FROM tbl_usuario WHERE excluido_em IS NOT NULL";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_COLUMN);
-}
+
 
 
    //Metodo de buscar todos usuarios por email

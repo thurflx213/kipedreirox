@@ -11,7 +11,7 @@ class Rotas
         // o caminho da URL    o nome do controlle e o metodo do controle 
         "/usuarios" => "UsuarioController@index",
         "/usuario/criar" => "UsuarioController@viewCriarUsuarios",
-        "/usuario/listar{pagina}" => "UsuarioController@viewListarUsuarios",
+        "/usuario/listar/{pagina}" => "UsuarioController@viewListarUsuarios",
         "/usuario/editar/{id}" => "UsuarioController@viewEditarUsuarios",
         "/usuario/excluir/{id}" => "UsuarioController@viewExcluirUsuarios",
         "/usuario/{id}/relatorio/{data1}/{data2}" => "UsuarioController@relatorioUsuario",

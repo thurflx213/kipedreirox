@@ -29,7 +29,7 @@ class UsuarioController {
     $total_ativos = $this->usuario->buscarUsuariosAtivos();
     view::render('usuario/index', 
     [
-        "usuarios" => $dados,
+        "usuarios" => $dados['data'],
         "total_usuarios" => $total,
         "total_inativos" => $total_inativos,
         "total_ativos" => $total_ativos,
