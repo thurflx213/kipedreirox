@@ -7,12 +7,15 @@ use App\Kipedreiro\Core\View;
 use App\Kipedreiro\Core\Redirect;
 use App\Kipedreiro\Validadores\UsuarioValidador;
 use App\Kipedreiro\Core\FileManager;
+use App\Kipedreiro\Controllers\Admin\AdminController;
+use App\Kipedreiro\Controllers\Admin\AuthenticatedController;
 
-class UsuarioController {
+class UsuarioController extends AdminController{
     public $usuario;
     public $db;
     public $gerenciarImagem;
     public function __construct() {
+        parent::__construct();
         $this->db = Database::getInstance();
         $this->usuario = new Usuario($this->db);
         $this->gerenciarImagem = new FileManager('upload');
