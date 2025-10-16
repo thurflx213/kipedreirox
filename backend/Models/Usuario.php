@@ -187,6 +187,7 @@ function buscarUsuariosPorEmailInativos($email){
     if (count($usuario) !== 1){
         return false;
     }
+   
     $usuario = $usuario[0];
     if (password_verify($senha, $usuario['senha_usuario'])){
         return $usuario;

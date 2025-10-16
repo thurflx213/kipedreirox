@@ -6,7 +6,7 @@ use App\Kipedreiro\Core\Redirect;
 
 abstract class AuthenticatedController{
     protected Session $session;
-    public function __contruct(){
+    public function __construct(){
         $this->session = new Session();
         if (!$this->session->has('usuario_id')) {
             redirect::redirecionarComMensagem(

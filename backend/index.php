@@ -2,7 +2,9 @@
 namespace App\Kipedreiro;
 require_once __DIR__ . '/../vendor/autoload.php';
 use App\Kipedreiro\Rotas\Rotas;
-
+if (!isset($_SESSION)) {
+    session_start();
+}
 use Bramus\Router\Router;        
 $router = new Router();
 
