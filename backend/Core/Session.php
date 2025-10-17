@@ -2,7 +2,7 @@
 namespace App\Kipedreiro\Core;
 
 class Session{
-    public function __contruct(){
+    public function __construct(){
         if(session_status() === PHP_SESSION_NONE){
             session_start();
         }

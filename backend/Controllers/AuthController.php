@@ -12,15 +12,15 @@ use App\Kipedreiro\Core\Session;
 
 class AuthController{
     private Usuario $usuarioModel;
-    private session $session;
+    private Session $session;
 
     public function __construct(){
-        $db = database::getInstance();
+        $db = Database::getInstance();
         $this->usuarioModel = new Usuario($db);
         $this->session = new Session();
     }
     public function login(): void{
-        view::render('auth/login');
+        View::render('auth/login');
     }
 
    public function register(): void {
