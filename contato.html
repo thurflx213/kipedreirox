@@ -80,5 +80,15 @@
             </div>
         </div>
     </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", async function() {
+        let response = await fetch("https://openlibrary.org/search.json?q=harry%2Bpotter", { 
+        method: "GET",
+        });
+        let data = await response.json();
+        console.log(data);
+    });
+
+    </script>
 </body>
 </html>

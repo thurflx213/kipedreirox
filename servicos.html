@@ -34,48 +34,11 @@
 <main>
     <section class="servicos">
             <div class="container">
-                <div class="servicos__lista">
-                    <div class="card" data-service="alvenaria">
-                        <div class="card__frente" style="background-image: url('assets/img/building-teamwork-partnership.jpg');">
-                            <h3 class="card__titulo">ALVENARIA</h3>
-                        </div>
-                        <div class="card__verso">
-                            <h3 class="card__titulo--verso">ALVENARIA</h3>
-                            <p class="card__descricao">Construção de paredes, muros e estruturas com segurança e qualidade.</p>
-                        </div>
-                    </div>
-                    <div class="card" data-service="reformas">
-                         <div class="card__frente" style="background-image: url('assets/img/bricklaying-construction-worker-building-brick-wall.jpg');">
-                            <h3 class="card__titulo">REFORMAS</h3>
-                        </div>
-                        <div class="card__verso">
-                            <h3 class="card__titulo--verso">REFORMAS</h3>
-                            <p class="card__descricao">Preparamos sua obra do básico ao bom acabamento, agilidade e excelência.</p>
-                        </div>
-                    </div>
-                    <div class="card" data-service="eletrica">
-                         <div class="card__frente" style="background-image: url('assets/img/electrician-installer-with-tool-his-hands-working-with-cable-construction-site.jpg');">
-                            <h3 class="card__titulo">ELÉTRICA</h3>
-                        </div>
-                        <div class="card__verso">
-                            <h3 class="card__titulo--verso">ELÉTRICA</h3>
-                            <p class="card__descricao">Instalações e manutenções elétricas prediais e comerciais na sua obra.</p>
-                        </div>
-                    </div>
-                    <div class="card" data-service="gestao">
-                         <div class="card__frente" style="background-image: url('assets/img/bricklayer-adding-cement-top-bricks.jpg');">
-                            <h3 class="card__titulo">GESTÃO</h3>
-                        </div>
-                        <div class="card__verso">
-                            <h3 class="card__titulo--verso">GESTÃO</h3>
-                            <p class="card__descricao">Acompanhamos sua obra da compra de materiais à gestão da mão de obra.</p>
-                        </div>
-                    </div>
-                </div>
-                
+                <div class="servicos__lista">                  
+                </div>                
             </div>
         </section>
-            </main>
+</main>
 
     <footer class="rodape">
         <div class="container">
@@ -110,5 +73,45 @@
             </div>
         </div>
     </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+  const container = document.querySelector('.servicos__lista');
+  if (!container) return;
+  container.innerHTML = '<h3>Carregando serviços...</h3>';
+  fetch('/backend/api/servicos')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Falha ao carregar dados da rede.');
+      }
+      return response.json();
+    })
+    .then(json => {
+      if (json.status !== 'success' || !json.data) {
+        throw new Error('API retornou um erro: ' + (json.message || 'Formato inválido'));
+      }
+
+      container.innerHTML = '';
+      json.data.forEach(servico => {
+        const cardHtml = `
+           <div class="card" data-service="${servico.nome_servico.toLowerCase()}">
+              <div class="card__frente" style="background-image: url('${servico.caminho_imagem}');">
+                 <h3 class="card__titulo">${servico.nome_servico.toUpperCase()}</h3>
+           </div>
+           <div class="card__verso">
+              <h3 class="card__titulo--verso">${servico.nome_servico.toUpperCase()}</h3>
+              <p class="card__descricao">${servico.descricao_servico}</p>
+              </div>
+          </div>
+        `;
+        container.insertAdjacentHTML('beforeend', cardHtml);
+      });
+    })
+    .catch(error => {
+      console.error('Erro ao buscar serviços:', error);
+      container.innerHTML = '<p style="color: red;">Não foi possivel carregar os servicos no momento. Por favor, tente novamente mais tarde.</p>';
+       });
+  });
+       
+    </script>
 </body>
 </html>
