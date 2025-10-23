@@ -1,6 +1,6 @@
 <div class="w3-container">
     <h3>Novo Serviço</h3>
-    <form action="/servico/salvar" method="POST" enctype="multipart/form-data" class="w3-container w3-card-4">
+    <form action="/backend/servico/salvar" method="POST" enctype="multipart/form-data" class="w3-container w3-card-4">
         
         <p>
         <label class="w3-text-blue"><b>Nome do Serviço</b></label>
