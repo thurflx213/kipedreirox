@@ -69,6 +69,24 @@ public function paginacao(int $pagina = 1, int $por_pagina = 10): array{
         ];
     }
 
+    public function paginacaoAPI(int $pagina = 1, int $por_pagina = 10): array{
+        $totalQuery = "SELECT COUNT(*) FROM `tbl_usuario`";
+        $totalStmt = $this->db->query($totalQuery);
+        $total_de_registros = $totalStmt->fetchColumn();
+        $offset = ($pagina - 1) * $por_pagina;
+        $dataQuery = "SELECT * FROM `tbl_usuario` LIMIT :limit OFFSET :offset";
+        $dataStmt = $this->db->prepare($dataQuery);
+        $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
+        $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $dataStmt->execute();
+        $dados = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
+        $lastPage = ceil($total_de_registros / $por_pagina);
+ 
+        return [
+            'data' => $dados
+        ];
+    }
+
 
 
 
@@ -102,8 +120,7 @@ function buscarUsuariosPorEmailInativos($email){
    $senha, 
    $tipo, 
    $status,
-   $imagem
-   ){
+   $imagem=""){
     $senha = password_hash($senha, PASSWORD_DEFAULT);
     $sql = "INSERT INTO tbl_usuario (nome_usuario, email_usuario,
     senha_usuario, tipo_usuario, status_usuario, foto_usuario)
@@ -194,4 +211,15 @@ function buscarUsuariosPorEmailInativos($email){
     }
     return false;
   }
+  // No Model Usuario.php
+public function contarPorNivelDeAcesso(): array {
+    $sql = "SELECT nivel_acesso, COUNT(*) as total
+            FROM tbl_usuarios
+            WHERE excluido_em IS NULL
+            GROUP BY nivel_acesso";
+    
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC); // Retorna: [['nivel_acesso' => 'admin', 'total' => 3], ...]
+}
 }
